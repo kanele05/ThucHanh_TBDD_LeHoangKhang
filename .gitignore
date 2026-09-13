@@ -23,3 +23,9 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# local only (not pushed)
+/bookstore-online-gio1/
+/bookstore-online-gio2/
+/bookstore-online-gio3/
+/bookstore-online-tonghop/
