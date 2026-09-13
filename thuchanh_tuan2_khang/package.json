@@ -1,0 +1,14 @@
+{
+  "name": "thuchanh-async-typescript",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "check": "tsc --noEmit",
+    "run-all": "node run-all.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "typescript": "^7.0.2"
+  }
+}
