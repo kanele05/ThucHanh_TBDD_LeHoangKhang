@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# Claude Code
+.claude/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# OS
+.DS_Store
+
+# local env files
+.env*.local
+
+# typescript
+*.tsbuildinfo
