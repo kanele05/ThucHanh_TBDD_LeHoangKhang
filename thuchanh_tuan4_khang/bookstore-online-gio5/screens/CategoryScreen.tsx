@@ -1,23 +1,58 @@
-// GIỜ 5 — Tab "Danh mục": tái sử dụng CategoryChips của Giờ 2 dưới thanh tiêu đề cố định.
+// GIỜ 5 — Tab "Danh mục": danh sách CATEGORIES thật từ data.ts, mỗi dòng là 1
+// row flexDirection:'row' + justifyContent:'space-between' (tên bên trái, dấu
+// ">" bên phải) -- layout đơn giản, đúng tinh thần "modest" của tài liệu.
 import React from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
-import { TitleBar } from "../components/TitleBar";
-import { CategoryChips } from "../components/CategoryChips";
-import { TAB_BAR_SPACE } from "../components/TabLayout";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { CATEGORIES } from "../data";
+import { TAB_BAR_HEIGHT, USE_ABSOLUTE_TAB_BAR } from "../components/TabBar";
 
 export function CategoryScreen() {
   return (
     <View style={styles.screen}>
-      <TitleBar title="Danh mục" />
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
-        <CategoryChips />
+      <Text style={styles.header}>Danh mục</Text>
+
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {CATEGORIES.map((name) => (
+          <View key={name} style={styles.row}>
+            <Text style={styles.rowText}>{name}</Text>
+            <Text style={styles.chevron}>›</Text>
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: "#F8FAFC" },
-  scroll: { flex: 1 },
-  content: { padding: 16, paddingBottom: 16 + TAB_BAR_SPACE },
+  screen: { flex: 1, backgroundColor: "#FFFFFF" },
+  header: {
+    fontSize: 18,
+    fontWeight: "800",
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  scrollContent: {
+    paddingHorizontal: 16,
+    // TabBar absolute KHÔNG chiếm chỗ trong luồng flex -> phải chừa thêm đúng
+    // chiều cao TabBar, nếu không phần tử cuối danh sách sẽ bị TabBar che mất.
+    paddingBottom: 16 + (USE_ABSOLUTE_TAB_BAR ? TAB_BAR_HEIGHT : 0),
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F1F5F9",
+  },
+  rowText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#111827",
+  },
+  chevron: {
+    fontSize: 18,
+    color: "#9CA3AF",
+  },
 });

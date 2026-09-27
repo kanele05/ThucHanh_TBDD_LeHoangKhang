@@ -35,12 +35,7 @@ export const BOOKS: Book[] = [
     description:
       "Cuốn sách kể về hành trình phiêu lưu của chú Dế Mèn, qua đó gửi gắm bài học về lòng dũng cảm, " +
       "sự trưởng thành và tình bạn. Đây là tác phẩm văn học thiếu nhi kinh điển của Việt Nam, được nhiều " +
-      "thế hệ độc giả yêu thích và đưa vào chương trình giảng dạy phổ thông.\n\n" +
-      "Từ một chú dế kiêu căng, hay bắt nạt kẻ yếu, Dế Mèn đã phải trả giá đắt bằng cái chết của Dế Choắt. " +
-      "Bài học đầu đời ấy thôi thúc Dế Mèn rời nhà, cùng người bạn Dế Trũi đi khắp nơi, gặp gỡ đủ mọi loài " +
-      "vật, trải qua biết bao thử thách và dần trở thành một hiệp sĩ biết bênh vực kẻ yếu.\n\n" +
-      "Với lối kể chuyện sinh động, ngôn ngữ giàu hình ảnh, tác phẩm không chỉ hấp dẫn các em nhỏ mà còn " +
-      "khiến người lớn đọc lại vẫn thấy thú vị và nhiều suy ngẫm.",
+      "thế hệ độc giả yêu thích và đưa vào chương trình giảng dạy phổ thông.",
   },
   {
     id: 2,
@@ -51,12 +46,7 @@ export const BOOKS: Book[] = [
     isNew: true,
     description:
       "Câu chuyện ngụ ngôn về chàng chăn cừu Santiago trên hành trình đi tìm kho báu, khám phá ra rằng " +
-      "kho báu lớn nhất chính là những bài học có được trên con đường mình đã đi qua.\n\n" +
-      "Rời bỏ đàn cừu và cuộc sống bình yên ở Andalusia, Santiago băng qua sa mạc châu Phi, gặp người vua " +
-      "xứ Salem, người thương gia pha lê, cô gái Fatima và nhà giả kim bí ẩn. Mỗi cuộc gặp gỡ dạy cậu cách " +
-      "lắng nghe trái tim và đọc những dấu hiệu của cuộc đời.\n\n" +
-      "Cuốn sách ngắn gọn, giản dị nhưng giàu triết lý, đã được dịch ra hơn 80 ngôn ngữ và truyền cảm hứng " +
-      "cho hàng triệu người theo đuổi ước mơ của mình.",
+      "kho báu lớn nhất chính là những bài học có được trên con đường mình đã đi qua.",
   },
   {
     id: 3,
@@ -64,12 +54,27 @@ export const BOOKS: Book[] = [
     author: "Yuval Noah Harari",
     price: 129000,
     cover: "https://picsum.photos/seed/book3/400/560",
+    // Mô tả CỐ TÌNH viết rất dài (nhiều đoạn) để làm ví dụ bắt buộc phải cuộn ở
+    // màn Chi tiết (Giờ 4 — Bài tập 2), kiểm chứng ScrollView flex:1 hoạt động
+    // đúng và không đẩy thanh "Thêm vào giỏ" cố định trôi khỏi màn hình.
     description:
       "Một góc nhìn tổng quan về lịch sử loài người, từ thời kỳ đồ đá cho đến cuộc cách mạng khoa học " +
       "và công nghệ hiện đại, lý giải vì sao Homo sapiens trở thành loài thống trị hành tinh.\n\n" +
-      "Tác giả dẫn dắt người đọc qua bốn cuộc cách mạng lớn: Cách mạng Nhận thức, Cách mạng Nông nghiệp, " +
-      "sự hợp nhất của loài người và Cách mạng Khoa học — đặt ra những câu hỏi về hạnh phúc, quyền lực và " +
-      "tương lai của chính chúng ta.",
+      "Tác giả chia lịch sử nhân loại thành ba cuộc cách mạng lớn: Cách mạng Nhận thức giúp con người " +
+      "hình thành ngôn ngữ và khả năng tưởng tượng ra những điều không tồn tại (huyền thoại, tôn giáo, " +
+      "quốc gia, tiền tệ...), từ đó hợp tác được với số lượng lớn người xa lạ. Cách mạng Nông nghiệp " +
+      "khiến con người từ săn bắt hái lượm chuyển sang định cư trồng trọt, nhưng tác giả lập luận đây " +
+      "cũng là một trong những 'cú lừa' lớn nhất lịch sử vì khiến cuộc sống cá nhân vất vả hơn để đổi " +
+      "lấy sự bùng nổ dân số. Cách mạng Khoa học trong vài trăm năm gần đây thì thay đổi hoàn toàn cách " +
+      "loài người kiểm soát năng lượng, vật chất và thông tin.\n\n" +
+      "Cuốn sách cũng đặt ra nhiều câu hỏi gây tranh luận: Tiền bạc, đế chế và tôn giáo có điểm chung gì " +
+      "khiến hàng triệu người xa lạ tin tưởng và hợp tác với nhau? Chủ nghĩa tư bản có phải một dạng " +
+      "'tôn giáo' mới? Hạnh phúc của con người thời hiện đại có thực sự tăng lên cùng với tiến bộ công " +
+      "nghệ hay không? Và cuối cùng, khi công nghệ sinh học và trí tuệ nhân tạo phát triển, liệu Homo " +
+      "sapiens có đang đứng trước ngưỡng cửa tự biến đổi chính mình thành một loài khác?\n\n" +
+      "Với lối viết vừa khoa học vừa dễ tiếp cận, Sapiens đã trở thành một trong những cuốn sách phi hư " +
+      "cấu bán chạy nhất thế giới, được dịch ra hàng chục thứ tiếng và được nhiều nhân vật nổi tiếng " +
+      "trong giới công nghệ, chính trị khuyên đọc.",
   },
   {
     id: 4,
@@ -80,10 +85,7 @@ export const BOOKS: Book[] = [
     discountPercent: 15,
     description:
       "Những lá thư gửi đến một tiệm tạp hoá cũ kỹ vượt thời gian, kết nối quá khứ và hiện tại, mang đến " +
-      "câu chuyện ấm áp về sự sẻ chia và chữa lành.\n\n" +
-      "Ba thanh niên trốn vào tiệm tạp hoá bỏ hoang sau một phi vụ trộm, rồi bất ngờ nhận được những lá " +
-      "thư xin lời khuyên gửi từ hơn ba mươi năm trước. Từng lá thư hồi âm dần hé lộ sợi dây vô hình nối " +
-      "những số phận tưởng chừng không liên quan.",
+      "câu chuyện ấm áp về sự sẻ chia và chữa lành.",
   },
   {
     id: 5,

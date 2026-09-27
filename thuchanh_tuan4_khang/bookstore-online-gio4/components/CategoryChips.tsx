@@ -1,7 +1,14 @@
+// GIỜ 2 — Bài tập 1: Danh mục dạng chip, tự xuống dòng khi tràn
+// Kỹ thuật: flexWrap 'wrap' + gap, mỗi chip width 'auto' theo nội dung.
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { CATEGORIES } from "../data";
 
+// LƯU Ý (đúng gợi ý "so sánh khi có/không có alignContent"): alignContent chỉ
+// tạo khác biệt QUAN SÁT ĐƯỢC khi container có chiều cao LỚN HƠN nội dung nhiều
+// dòng — vì nó điều khiển cách các DÒNG (không phải từng phần tử) phân bố trong
+// phần dư đó. Nếu container chỉ cao vừa đủ (mặc định), bật/tắt alignContent sẽ
+// KHÔNG thấy gì đổi. Đặt true bên dưới để tự tạo chiều cao dư và thấy rõ hiệu ứng.
 const DEMO_EXTRA_HEIGHT = false;
 
 export function CategoryChips() {

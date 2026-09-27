@@ -1,32 +1,29 @@
-// GIỜ 5 — Tab "Tài khoản": layout tĩnh ôn lại row/column.
-//   - Khối hồ sơ: row + alignItems center (avatar tròn cố định + cột chữ flex:1).
-//   - Menu: mỗi dòng row + space-between (nhãn bên trái, dấu › bên phải).
+// GIỜ 5 — Tab "Tài khoản": layout hồ sơ đơn giản (avatar + tên + danh sách mục
+// menu). Avatar minh hoạ alignSelf: 'center' để tự canh giữa dù card cha là cột.
 import React from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
-import { TitleBar } from "../components/TitleBar";
-import { TAB_BAR_SPACE } from "../components/TabLayout";
+import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
+import { TAB_BAR_HEIGHT, USE_ABSOLUTE_TAB_BAR } from "../components/TabBar";
 
-const MENU = ["Đơn hàng của tôi", "Sách yêu thích", "Địa chỉ giao hàng", "Cài đặt", "Đăng xuất"];
+const MENU_ITEMS = ["Đơn hàng của tôi", "Địa chỉ giao hàng", "Sổ địa chỉ thanh toán", "Cài đặt", "Trợ giúp"];
 
 export function AccountScreen() {
   return (
     <View style={styles.screen}>
-      <TitleBar title="Tài khoản" />
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
-        <View style={styles.profile}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>BS</Text>
-          </View>
-          <View style={styles.profileInfo}>
-            <Text style={styles.name}>Bạn đọc BookStore</Text>
-            <Text style={styles.email}>bandoc@bookstore.vn</Text>
-          </View>
+      <Text style={styles.header}>Tài khoản</Text>
+
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.profileCard}>
+          {/* alignSelf: 'center' -> avatar tự canh giữa, không phụ thuộc alignItems
+              của profileCard (đang để mặc định 'stretch' cho các dòng text bên dưới). */}
+          <Image source={{ uri: "https://picsum.photos/seed/avatar/200/200" }} style={styles.avatar} />
+          <Text style={styles.name}>Nguyễn Văn A</Text>
+          <Text style={styles.email}>nguyenvana@gmail.com</Text>
         </View>
 
         <View style={styles.menu}>
-          {MENU.map((label, index) => (
-            <View key={label} style={[styles.menuRow, index > 0 && styles.menuRowBorder]}>
-              <Text style={styles.menuLabel}>{label}</Text>
+          {MENU_ITEMS.map((item) => (
+            <View key={item} style={styles.menuRow}>
+              <Text style={styles.menuText}>{item}</Text>
               <Text style={styles.chevron}>›</Text>
             </View>
           ))}
@@ -37,41 +34,61 @@ export function AccountScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: "#F8FAFC" },
-  scroll: { flex: 1 },
-  content: { padding: 16, gap: 16, paddingBottom: 16 + TAB_BAR_SPACE },
-  profile: {
-    flexDirection: "row",
+  screen: { flex: 1, backgroundColor: "#FFFFFF" },
+  header: {
+    fontSize: 18,
+    fontWeight: "800",
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  scrollContent: {
+    paddingHorizontal: 16,
+    // TabBar absolute KHÔNG chiếm chỗ trong luồng flex -> phải chừa thêm đúng
+    // chiều cao TabBar, nếu không phần tử cuối danh sách sẽ bị TabBar che mất.
+    paddingBottom: 16 + (USE_ABSOLUTE_TAB_BAR ? TAB_BAR_HEIGHT : 0),
+  },
+  profileCard: {
     alignItems: "center",
-    gap: 14,
-    padding: 16,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F1F5F9",
+    marginBottom: 8,
   },
   avatar: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: "#4338CA",
-    alignItems: "center",
-    justifyContent: "center",
+    alignSelf: "center", // canh giữa avatar dù cha có alignItems khác
+    width: 84,
+    height: 84,
+    borderRadius: 42, // = width/2 -> hình tròn
+    backgroundColor: "#EEF2F7",
+    marginBottom: 12,
   },
-  avatarText: { color: "#FFFFFF", fontSize: 18, fontWeight: "700" },
-  profileInfo: { flex: 1 },
-  name: { fontSize: 16, fontWeight: "700", color: "#111827" },
-  email: { marginTop: 2, fontSize: 13, color: "#6B7280" },
-  menu: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    paddingHorizontal: 16,
+  name: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#111827",
   },
+  email: {
+    fontSize: 12,
+    color: "#5B6B7F",
+    marginTop: 2,
+  },
+  menu: { marginTop: 8 },
   menuRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    height: 52,
+    justifyContent: "space-between",
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F1F5F9",
   },
-  menuRowBorder: { borderTopWidth: 1, borderTopColor: "#F1F5F9" },
-  menuLabel: { fontSize: 15, color: "#111827" },
-  chevron: { fontSize: 20, color: "#9CA3AF" },
+  menuText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#111827",
+  },
+  chevron: {
+    fontSize: 18,
+    color: "#9CA3AF",
+  },
 });

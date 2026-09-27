@@ -35,12 +35,7 @@ export const BOOKS: Book[] = [
     description:
       "Cuốn sách kể về hành trình phiêu lưu của chú Dế Mèn, qua đó gửi gắm bài học về lòng dũng cảm, " +
       "sự trưởng thành và tình bạn. Đây là tác phẩm văn học thiếu nhi kinh điển của Việt Nam, được nhiều " +
-      "thế hệ độc giả yêu thích và đưa vào chương trình giảng dạy phổ thông.\n\n" +
-      "Từ một chú dế kiêu căng, hay bắt nạt kẻ yếu, Dế Mèn đã phải trả giá đắt bằng cái chết của Dế Choắt. " +
-      "Bài học đầu đời ấy thôi thúc Dế Mèn rời nhà, cùng người bạn Dế Trũi đi khắp nơi, gặp gỡ đủ mọi loài " +
-      "vật, trải qua biết bao thử thách và dần trở thành một hiệp sĩ biết bênh vực kẻ yếu.\n\n" +
-      "Với lối kể chuyện sinh động, ngôn ngữ giàu hình ảnh, tác phẩm không chỉ hấp dẫn các em nhỏ mà còn " +
-      "khiến người lớn đọc lại vẫn thấy thú vị và nhiều suy ngẫm.",
+      "thế hệ độc giả yêu thích và đưa vào chương trình giảng dạy phổ thông.",
   },
   {
     id: 2,
@@ -51,12 +46,7 @@ export const BOOKS: Book[] = [
     isNew: true,
     description:
       "Câu chuyện ngụ ngôn về chàng chăn cừu Santiago trên hành trình đi tìm kho báu, khám phá ra rằng " +
-      "kho báu lớn nhất chính là những bài học có được trên con đường mình đã đi qua.\n\n" +
-      "Rời bỏ đàn cừu và cuộc sống bình yên ở Andalusia, Santiago băng qua sa mạc châu Phi, gặp người vua " +
-      "xứ Salem, người thương gia pha lê, cô gái Fatima và nhà giả kim bí ẩn. Mỗi cuộc gặp gỡ dạy cậu cách " +
-      "lắng nghe trái tim và đọc những dấu hiệu của cuộc đời.\n\n" +
-      "Cuốn sách ngắn gọn, giản dị nhưng giàu triết lý, đã được dịch ra hơn 80 ngôn ngữ và truyền cảm hứng " +
-      "cho hàng triệu người theo đuổi ước mơ của mình.",
+      "kho báu lớn nhất chính là những bài học có được trên con đường mình đã đi qua.",
   },
   {
     id: 3,
@@ -66,10 +56,7 @@ export const BOOKS: Book[] = [
     cover: "https://picsum.photos/seed/book3/400/560",
     description:
       "Một góc nhìn tổng quan về lịch sử loài người, từ thời kỳ đồ đá cho đến cuộc cách mạng khoa học " +
-      "và công nghệ hiện đại, lý giải vì sao Homo sapiens trở thành loài thống trị hành tinh.\n\n" +
-      "Tác giả dẫn dắt người đọc qua bốn cuộc cách mạng lớn: Cách mạng Nhận thức, Cách mạng Nông nghiệp, " +
-      "sự hợp nhất của loài người và Cách mạng Khoa học — đặt ra những câu hỏi về hạnh phúc, quyền lực và " +
-      "tương lai của chính chúng ta.",
+      "và công nghệ hiện đại, lý giải vì sao Homo sapiens trở thành loài thống trị hành tinh.",
   },
   {
     id: 4,
@@ -80,10 +67,7 @@ export const BOOKS: Book[] = [
     discountPercent: 15,
     description:
       "Những lá thư gửi đến một tiệm tạp hoá cũ kỹ vượt thời gian, kết nối quá khứ và hiện tại, mang đến " +
-      "câu chuyện ấm áp về sự sẻ chia và chữa lành.\n\n" +
-      "Ba thanh niên trốn vào tiệm tạp hoá bỏ hoang sau một phi vụ trộm, rồi bất ngờ nhận được những lá " +
-      "thư xin lời khuyên gửi từ hơn ba mươi năm trước. Từng lá thư hồi âm dần hé lộ sợi dây vô hình nối " +
-      "những số phận tưởng chừng không liên quan.",
+      "câu chuyện ấm áp về sự sẻ chia và chữa lành.",
   },
   {
     id: 5,
@@ -102,6 +86,40 @@ export const BOOKS: Book[] = [
     isNew: true,
     description: "Đúc kết 13 nguyên tắc thành công từ hơn 500 nhân vật thành đạt nhất nước Mỹ đầu thế kỷ 20.",
   },
+  {
+    id: 7,
+    title: "Tuổi Trẻ Đáng Giá Bao Nhiêu",
+    author: "Rosie Nguyễn",
+    price: 68000,
+    cover: "https://picsum.photos/seed/book7/400/560",
+    description: "Những chia sẻ về học tập, làm việc và trải nghiệm dành cho người trẻ đang tìm hướng đi cho mình.",
+  },
+  {
+    id: 8,
+    title: "Nhà Lãnh Đạo Không Chức Danh",
+    author: "Robin Sharma",
+    price: 82000,
+    cover: "https://picsum.photos/seed/book8/400/560",
+    discountPercent: 10,
+    description: "Bài học về khả năng lãnh đạo không đến từ chức vụ mà đến từ thái độ và hành động mỗi ngày.",
+  },
+  {
+    id: 9,
+    title: "Đắc Nhân Tâm",
+    author: "Dale Carnegie",
+    price: 86000,
+    cover: "https://picsum.photos/seed/book9/400/560",
+    description: "Cuốn sách kinh điển về nghệ thuật đối nhân xử thế, được xem là sách gối đầu giường của nhiều thế hệ.",
+  },
+  {
+    id: 10,
+    title: "Người Giàu Có Nhất Thành Babylon",
+    author: "George S. Clason",
+    price: 59000,
+    cover: "https://picsum.photos/seed/book10/400/560",
+    isNew: true,
+    description: "Những bài học quản lý tài chính cá nhân được kể qua các câu chuyện ngụ ngôn ở thành Babylon cổ đại.",
+  },
 ];
 
 export interface CartItem {
@@ -109,9 +127,17 @@ export interface CartItem {
   quantity: number;
 }
 
-// Giỏ hàng mẫu dùng sẵn cho Giờ 5 — Bài tập 2 (Cart Screen)
+// Giỏ hàng mẫu dùng sẵn cho Giờ 5 — Bài tập 2 (Cart Screen).
+// Cố tình liệt kê đủ 8 dòng (thay vì 3) để danh sách CAO HƠN vùng hiển thị,
+// bắt buộc phải cuộn -> mới kiểm chứng được ScrollView (flex:1) hoạt động đúng,
+// còn thanh tổng tiền + TabBar phía dưới vẫn đứng yên, không bị cuộn theo.
 export const CART_ITEMS: CartItem[] = [
   { book: BOOKS[0], quantity: 2 },
   { book: BOOKS[1], quantity: 1 },
-  { book: BOOKS[3], quantity: 1 },
+  { book: BOOKS[2], quantity: 1 },
+  { book: BOOKS[3], quantity: 3 },
+  { book: BOOKS[4], quantity: 1 },
+  { book: BOOKS[6], quantity: 2 },
+  { book: BOOKS[8], quantity: 1 },
+  { book: BOOKS[9], quantity: 1 },
 ];

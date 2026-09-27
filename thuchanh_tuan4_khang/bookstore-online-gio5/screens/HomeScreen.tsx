@@ -1,79 +1,94 @@
-// GIỜ 4 — Bài tập 1: Màn hình Trang chủ BookStore hoàn chỉnh
-// (Giờ 5: SafeAreaView chuyển ra App.tsx bọc chung cả Tab Bar, màn hình này chỉ còn View flex:1.)
-// Ghép Header (Giờ 1) + Category Chips (Giờ 2) + Book Grid (Giờ 2/3) + Floating Cart Button (Giờ 3).
-//
-// Cây layout (đúng yêu cầu kỹ thuật của bài):
-//   View (flex:1)
-//   ├── Header            -> CỐ ĐỊNH, không nằm trong ScrollView
-//   ├── ScrollView        -> flex:1, chứa Chips + Grid, chỉ phần này cuộn
-//   └── FloatingCartButton-> position:'absolute', CÙNG CẤP với ScrollView (không nằm bên trong)
+// GIỜ 5 — Tab "Trang chủ": placeholder ở mức "modest" nhưng vẫn là layout thật,
+// không chỉ là dòng chữ trỏ sang project khác. Hiển thị lưới sách từ data.ts,
+// minh hoạ thêm flexWrap + aspectRatio (2 khái niệm ôn lại ở lý thuyết Giờ 5).
 import React from "react";
-import { View, ScrollView, Text, StyleSheet } from "react-native";
-import { Header } from "../components/Header";
-import { CategoryChips } from "../components/CategoryChips";
-import { BookGrid } from "../components/BookGrid";
-import { FloatingCartButton } from "../components/FloatingCartButton";
-import { TAB_BAR_SPACE } from "../components/TabLayout";
+import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
 import { BOOKS } from "../data";
+import { TAB_BAR_HEIGHT, USE_ABSOLUTE_TAB_BAR } from "../components/TabBar";
 
-// Nút giỏ cao 56 + cách đáy 24 = 80 -> chừa dư thêm để thẻ sách cuối cùng
-// cuộn lên được hẳn phía trên nút, không bị nút che mất.
-const FAB_SPACE = 100;
-
-export function HomeScreen({
-  cartCount,
-  onOpenBook,
-  onPressCart,
-}: {
-  cartCount: number;
-  onOpenBook: (id: number) => void;
-  onPressCart: () => void;
-}) {
+export function HomeScreen() {
   return (
-    // View flex:1 là containing block cho nút giỏ absolute bên dưới.
     <View style={styles.screen}>
-      <Header />
+      <Text style={styles.header}>Trang chủ</Text>
 
-      {/* style flex:1 -> ScrollView chiếm hết phần chiều cao còn lại dưới Header.
-          contentContainerStyle mới là nơi đặt padding cho NỘI DUNG bên trong. */}
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={styles.sectionTitle}>Danh mục</Text>
-        <CategoryChips />
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.sectionTitle}>Sách nổi bật</Text>
 
-        <Text style={[styles.sectionTitle, styles.gridTitle]}>Sách nổi bật</Text>
-        <BookGrid books={BOOKS} onPressBook={onOpenBook} />
+        {/* flexWrap: 'wrap' -> tự xuống dòng khi hết chỗ ngang, mỗi thẻ chiếm ~48%
+            bề rộng -> lưới 2 cột không cần tính toán width bằng tay. */}
+        <View style={styles.grid}>
+          {BOOKS.map((book) => (
+            <View key={book.id} style={styles.card}>
+              {/* aspectRatio thay cho height cố định -> ảnh luôn giữ đúng tỉ lệ
+                  dù bề rộng thẻ co giãn theo màn hình. */}
+              <Image source={{ uri: book.cover }} style={styles.cover} />
+              <Text style={styles.title} numberOfLines={1}>
+                {book.title}
+              </Text>
+              <Text style={styles.author} numberOfLines={1}>
+                {book.author}
+              </Text>
+              <Text style={styles.price}>{book.price.toLocaleString()} đ</Text>
+            </View>
+          ))}
+        </View>
       </ScrollView>
-
-      {/* Nằm NGOÀI ScrollView, song song với nó -> đứng yên khi nội dung cuộn.
-          Nếu đặt vào trong ScrollView, nút sẽ neo theo nội dung và trôi đi theo. */}
-      <FloatingCartButton count={cartCount} onPress={onPressCart} bottomOffset={TAB_BAR_SPACE} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: "#F8FAFC",
+  screen: { flex: 1, backgroundColor: "#FFFFFF" },
+  header: {
+    fontSize: 18,
+    fontWeight: "800",
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
   },
-  scroll: {
-    flex: 1,
-  },
-  content: {
-    padding: 16,
-    paddingBottom: FAB_SPACE + TAB_BAR_SPACE, // chừa chỗ cho nút giỏ hàng nổi (+ tab bar nếu absolute)
+  scrollContent: {
+    paddingHorizontal: 16,
+    // TabBar absolute KHÔNG chiếm chỗ trong luồng flex -> phải chừa thêm đúng
+    // chiều cao TabBar, nếu không phần tử cuối danh sách sẽ bị TabBar che mất.
+    paddingBottom: 16 + (USE_ABSOLUTE_TAB_BAR ? TAB_BAR_HEIGHT : 0),
   },
   sectionTitle: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "700",
-    color: "#111827",
+    color: "#5B6B7F",
     marginBottom: 10,
   },
-  gridTitle: {
-    marginTop: 20,
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  card: {
+    width: "48%", // 2 cột: 48% + 48% + khoảng gap ~ vừa đủ 100%
+    marginBottom: 16,
+  },
+  cover: {
+    width: "100%",
+    aspectRatio: 3 / 4, // giữ tỉ lệ ảnh bìa sách, không cần height cố định
+    borderRadius: 8,
+    backgroundColor: "#EEF2F7",
+  },
+  title: {
+    marginTop: 6,
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#111827",
+  },
+  author: {
+    fontSize: 11,
+    color: "#5B6B7F",
+    marginTop: 2,
+  },
+  price: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#1E1B4B",
+    marginTop: 4,
   },
 });

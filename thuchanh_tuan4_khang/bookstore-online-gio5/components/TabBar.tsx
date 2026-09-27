@@ -1,49 +1,69 @@
-// GIỜ 5 — Bài tập 1: Thanh Tab Bar dưới cùng (giao diện tĩnh, không dùng thư viện navigation)
-// Kỹ thuật:
-//  - Container: flexDirection 'row', mỗi mục flex:1 -> 4 mục chia đều bề ngang.
-//  - Mỗi mục : flexDirection 'column' + alignItems/justifyContent 'center' -> icon trên, chữ dưới, căn giữa.
-//  - Mục đang chọn: nền icon + màu chữ nổi bật.
+// GIỜ 5 — Bài tập 1: Thanh Tab Bar dưới cùng (giao diện tĩnh, chưa dùng thư viện
+// navigation thật — chỉ chuyển màn bằng useState ở App.tsx, đúng yêu cầu tài liệu).
+//
+// ─────────────────────────────────────────────────────────────────────────────
+// SO SÁNH 2 CÁCH "cố định" TabBar ở đáy màn hình — bật/tắt bằng USE_ABSOLUTE_TAB_BAR
+// bên dưới để tự trải nghiệm cả 2 (đổi true/false rồi reload app):
+//
+// 1) position: 'absolute' (bottom/left/right: 0), nằm CHỒNG lên nội dung phía trên:
+//    - Ưu điểm: TabBar luôn "nổi" đúng vị trí đáy màn hình bất kể nội dung bên trên
+//      là ScrollView, danh sách rỗng, hay màn hình bị lỗi layout — vì nó không phụ
+//      thuộc vào flex của các phần tử khác, thoát khỏi luồng (flow) bình thường.
+//    - Nhược điểm: PHẢI tự chừa khoảng trống (paddingBottom/marginBottom) cho phần
+//      tử cuối cùng của nội dung phía trên, nếu không TabBar sẽ ĐÈ lên nó. Ở đây
+//      dùng chung hằng số TAB_BAR_HEIGHT để tránh "magic number" bị lặp ở nhiều
+//      file (xem CartScreen.tsx).
+//    - Dùng khi: có nhiều màn hình khác nhau cùng dùng chung 1 TabBar, muốn code
+//      TabBar 1 lần duy nhất ở component gốc (App.tsx) và không phải lo từng màn
+//      hình con có bố cục ra sao.
+//
+// 2) Đặt CỐ ĐỊNH ngoài ScrollView theo flex bình thường (không absolute):
+//    - Ưu điểm: đơn giản, không cần tính paddingBottom bù trừ — vì TabBar là 1
+//      phần tử THẬT trong cây flex (flexDirection: 'column' mặc định của View),
+//      đứng sau khối nội dung flex:1, nên tự động không bao giờ bị chồng lấp.
+//    - Nhược điểm: nội dung phía trên BẮT BUỘC phải có flex:1 (hoặc chiều cao xác
+//      định) thì TabBar mới bị "đẩy" xuống đúng đáy; nếu quên flex:1, TabBar có
+//      thể bị đẩy lên giữa màn hình hoặc mất hẳn nếu nội dung tràn.
+//    - Dùng khi: chỉ có 1 cấu trúc màn hình cố định (như bài tập này), muốn tránh
+//      phải nhớ cộng trừ paddingBottom thủ công.
+//
+// => Cả 2 cách đều tạo ra kết quả HIỂN THỊ giống nhau, khác nhau ở cách layout
+// engine tính toán. Đổi USE_ABSOLUTE_TAB_BAR để thấy code ở CartScreen.tsx tự
+// thích ứng (marginBottom của thanh tổng tiền chỉ cần cộng thêm khi TabBar là
+// absolute, vì lúc đó TabBar không còn chiếm chỗ thật trong luồng flex nữa).
+// ─────────────────────────────────────────────────────────────────────────────
 import React from "react";
-import { View, Text, Pressable, StyleSheet, StyleProp, ViewStyle } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 
 export type TabKey = "home" | "category" | "cart" | "account";
 
-export const TAB_BAR_HEIGHT = 60;
+// Đổi true/false để thử 2 cách canh TabBar đã so sánh ở trên.
+export const USE_ABSOLUTE_TAB_BAR = true;
 
-const TABS: { key: TabKey; icon: string; label: string }[] = [
-  { key: "home", icon: "🏠", label: "Trang chủ" },
-  { key: "category", icon: "📚", label: "Danh mục" },
-  { key: "cart", icon: "🛒", label: "Giỏ hàng" },
-  { key: "account", icon: "👤", label: "Tài khoản" },
+// Chiều cao TabBar dùng CHUNG cho cả TabBar.tsx và CartScreen.tsx, tránh lặp lại
+// "số ma thuật" (magic number) 64 ở nhiều nơi -> đổi 1 chỗ là đồng bộ toàn app.
+export const TAB_BAR_HEIGHT = 64;
+
+const TABS: { key: TabKey; label: string; icon: string }[] = [
+  { key: "home", label: "Trang chủ", icon: "🏠" },
+  { key: "category", label: "Danh mục", icon: "📂" },
+  { key: "cart", label: "Giỏ hàng", icon: "🛒" },
+  { key: "account", label: "Tài khoản", icon: "👤" },
 ];
 
-export function TabBar({
-  activeTab,
-  onChangeTab,
-  cartCount,
-  style,
-}: {
-  activeTab: TabKey;
-  onChangeTab: (tab: TabKey) => void;
-  cartCount: number;
-  style?: StyleProp<ViewStyle>; // TabLayout truyền vào để đặt tab bar ở chế độ absolute
-}) {
+export function TabBar({ active, onChange }: { active: TabKey; onChange: (key: TabKey) => void }) {
   return (
-    <View style={[styles.bar, style]}>
+    <View style={[styles.bar, USE_ABSOLUTE_TAB_BAR ? styles.barAbsolute : styles.barStatic]}>
       {TABS.map((tab) => {
-        const active = tab.key === activeTab;
+        const isActive = tab.key === active;
         return (
-          <Pressable key={tab.key} style={styles.item} onPress={() => onChangeTab(tab.key)}>
-            {/* View bọc icon là containing block cho badge số lượng (absolute) — kỹ thuật Giờ 3 */}
-            <View style={[styles.iconWrap, active && styles.iconWrapActive]}>
-              <Text style={[styles.icon, !active && styles.iconInactive]}>{tab.icon}</Text>
-              {tab.key === "cart" && cartCount > 0 && (
-                <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{cartCount}</Text>
-                </View>
-              )}
-            </View>
-            <Text style={[styles.label, active && styles.labelActive]}>{tab.label}</Text>
+          <Pressable
+            key={tab.key}
+            style={styles.tabItem} // flex:1 -> 4 mục chia đều bằng nhau theo chiều ngang
+            onPress={() => onChange(tab.key)}
+          >
+            <Text style={[styles.icon, isActive && styles.iconActive]}>{tab.icon}</Text>
+            <Text style={[styles.label, isActive && styles.labelActive]}>{tab.label}</Text>
           </Pressable>
         );
       })}
@@ -59,52 +79,38 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#E5E7EB",
   },
-  item: {
-    flex: 1, // mỗi mục chiếm 1 phần bằng nhau -> chia đều 4 phần
-    flexDirection: "column", // icon ở trên, chữ ở dưới
-    alignItems: "center", // căn giữa theo chiều ngang
-    justifyContent: "center", // căn giữa theo chiều dọc
-    gap: 2,
+  // Cách 1: thoát luồng flex, tự neo vào đáy container gần nhất có position khác 'static'.
+  barAbsolute: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
-  iconWrap: {
-    width: 48,
-    height: 28,
-    borderRadius: 14,
+  // Cách 2: vẫn nằm trong luồng flex bình thường (không cần left/right/bottom),
+  // chỉ cần đứng SAU phần tử flex:1 trong cùng 1 View flexDirection:'column'.
+  barStatic: {
+    position: "relative",
+  },
+  tabItem: {
+    flex: 1, // chia đều 1/4 bề rộng cho mỗi mục, không cần tính width tay
+    flexDirection: "column", // icon trên, chữ dưới
     alignItems: "center",
     justifyContent: "center",
-  },
-  iconWrapActive: {
-    backgroundColor: "#E0E7FF", // nền indigo nhạt cho mục đang chọn
+    gap: 2,
   },
   icon: {
     fontSize: 18,
+    opacity: 0.5,
   },
-  iconInactive: {
-    opacity: 0.45, // emoji không đổi màu được -> làm mờ các mục không chọn
+  iconActive: {
+    opacity: 1,
   },
   label: {
     fontSize: 11,
-    color: "#6B7280",
+    color: "#9CA3AF",
   },
   labelActive: {
-    color: "#4338CA",
-    fontWeight: "700",
-  },
-  badge: {
-    position: "absolute",
-    top: -4,
-    right: 2,
-    minWidth: 18,
-    height: 18,
-    borderRadius: 9,
-    paddingHorizontal: 4,
-    backgroundColor: "#DC2626",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  badgeText: {
-    color: "#FFFFFF",
-    fontSize: 10,
+    color: "#4338CA", // màu nổi bật cho mục đang chọn
     fontWeight: "700",
   },
 });

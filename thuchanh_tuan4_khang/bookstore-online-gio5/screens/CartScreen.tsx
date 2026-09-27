@@ -1,49 +1,34 @@
-// GIỜ 5 — Bài tập 2: Màn hình Giỏ hàng (Cart Screen)
-//
-// Màn hình có đủ 3 vùng, xếp dọc, KHÔNG vùng nào chồng lên vùng nào:
-//   View (flex:1)
-//   ├── TitleBar          -> cố định trên cùng
-//   ├── ScrollView        -> flex:1, danh sách sản phẩm — vùng DUY NHẤT cuộn được
-//   └── SummaryBar        -> tổng tiền + nút Thanh toán, cố định, KHÔNG cuộn
-//   (Tab Bar do TabLayout vẽ ngay bên dưới màn hình này)
-//
-// Vì ScrollView lấy flex:1, nó chỉ chiếm phần chiều cao còn lại sau TitleBar và
-// SummaryBar -> danh sách dài đến đâu cũng không đẩy SummaryBar/Tab Bar ra khỏi màn hình.
+// GIỜ 5 — Bài tập 2: Màn hình Giỏ hàng
+// Đủ 3 vùng theo yêu cầu: nội dung cuộn (danh sách) + thanh tổng tiền cố định
+// (không cuộn) + TabBar cố định (vẽ ở App.tsx, không vùng nào chồng lấp vùng nào.
 import React from "react";
-import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
-import { TitleBar } from "../components/TitleBar";
-import { CartItemRow } from "../components/CartItemRow";
-import { TAB_BAR_SPACE } from "../components/TabLayout";
+import { View, ScrollView, Text, Pressable, StyleSheet } from "react-native";
+import { CartLineItem } from "../components/CartLineItem";
+import { TAB_BAR_HEIGHT, USE_ABSOLUTE_TAB_BAR } from "../components/TabBar";
 import { CartItem } from "../data";
-import { formatPrice, getFinalPrice } from "../format";
 
 export function CartScreen({ items }: { items: CartItem[] }) {
-  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + getFinalPrice(item.book) * item.quantity, 0);
+  const total = items.reduce((sum, item) => sum + item.book.price * item.quantity, 0);
 
   return (
     <View style={styles.screen}>
-      <TitleBar title="Giỏ hàng" right={`${totalQuantity} sản phẩm`} />
+      <Text style={styles.header}>Giỏ hàng</Text>
 
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
-      >
+      {/* Danh sách sản phẩm: CUỘN được (flex:1), nằm GIỮA header và thanh tổng tiền */}
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
         {items.map((item) => (
-          <CartItemRow key={item.book.id} item={item} />
+          <CartLineItem key={item.book.id} item={item} />
         ))}
       </ScrollView>
 
-      {/* Thanh tổng tiền: con cuối của View flex:1, nằm ngoài ScrollView -> luôn dính
-          ngay trên Tab Bar. Nếu tab bar ở chế độ absolute thì phải nâng lên thêm
-          TAB_BAR_SPACE, không thì tab bar sẽ đè lên thanh này. */}
-      <View style={[styles.summary, { marginBottom: TAB_BAR_SPACE }]}>
+      {/* Thanh tổng tiền + nút thanh toán: KHÔNG cuộn, đứng cố định ngay trên
+          TabBar (TabBar vẽ riêng ở App.tsx, cả 2 cùng "cố định" nhưng độc lập). */}
+      <View style={styles.totalBar}>
         <View>
-          <Text style={styles.summaryLabel}>Tổng tiền</Text>
-          <Text style={styles.summaryTotal}>{formatPrice(totalPrice)}</Text>
+          <Text style={styles.totalLabel}>Tổng cộng</Text>
+          <Text style={styles.totalValue}>{total.toLocaleString()} đ</Text>
         </View>
-        <Pressable style={styles.checkoutButton} onPress={() => console.log("Thanh toán", totalPrice)}>
+        <Pressable style={styles.checkoutButton}>
           <Text style={styles.checkoutText}>Thanh toán</Text>
         </Pressable>
       </View>
@@ -52,45 +37,37 @@ export function CartScreen({ items }: { items: CartItem[] }) {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: "#F8FAFC",
+  screen: { flex: 1, backgroundColor: "#FFFFFF" },
+  header: {
+    fontSize: 18,
+    fontWeight: "800",
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
   },
-  scroll: {
-    flex: 1, // chiếm phần còn lại giữa TitleBar và SummaryBar
-  },
-  list: {
-    padding: 16,
-    gap: 12, // khoảng cách đều giữa các dòng sản phẩm
-  },
-  summary: {
-    flexDirection: "row",
-    justifyContent: "space-between", // tổng tiền bên trái, nút bên phải
+  scroll: { flex: 1 },
+  scrollContent: { paddingHorizontal: 16, paddingBottom: 16 },
+  totalBar: {
+    flexDirection: "row", // tổng tiền bên trái, nút thanh toán bên phải
+    justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: "#FFFFFF",
+    paddingVertical: 14,
     borderTopWidth: 1,
     borderTopColor: "#E5E7EB",
+    // TabBar là 'absolute' -> nó KHÔNG chiếm chỗ thật trong luồng flex, nên phải
+    // tự chừa marginBottom = TAB_BAR_HEIGHT để thanh này không bị TabBar đè lên.
+    // Nếu TabBar chuyển sang cách 2 (nằm trong luồng flex, xem TabBar.tsx), nó đã
+    // tự chiếm chỗ thật rồi -> không cần cộng thêm khoảng trống này nữa (0).
+    marginBottom: USE_ABSOLUTE_TAB_BAR ? TAB_BAR_HEIGHT : 0,
   },
-  summaryLabel: {
-    fontSize: 12,
-    color: "#6B7280",
-  },
-  summaryTotal: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#1E1B4B",
-  },
+  totalLabel: { fontSize: 12, color: "#5B6B7F" },
+  totalValue: { fontSize: 18, fontWeight: "800", color: "#1E1B4B" },
   checkoutButton: {
     backgroundColor: "#4338CA",
-    paddingHorizontal: 28,
+    paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 10,
   },
-  checkoutText: {
-    color: "#FFFFFF",
-    fontSize: 15,
-    fontWeight: "700",
-  },
+  checkoutText: { color: "#FFFFFF", fontWeight: "700" },
 });
